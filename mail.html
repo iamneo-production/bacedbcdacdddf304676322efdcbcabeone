@@ -6,6 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .box{
+            display: grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:5px;
+            width:300px;
+            margin: 35px auto;
+        }
+        .b{
+            width: 100px;
+            height: 100px;
+            font-size:24px;
+            text-align: center;
+        }
+        .result{
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            background-color: azure;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            jus
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -30,7 +61,56 @@
     </div>
     <div class="result">Player X's turn</div>
     <button id="reset" disabled>Reset</button>
-    <script src="script.js"></script>
+    <script>const cells=document.querySelectorAll('.a');
+        const resultText=document.querySelector('.result');
+        const resetButton=document.querySelectorById('reset');
+        let currentPlayer = 'X';
+        let gameBoard=['','','','','','','','',''];
+        let gameActive = true;
+        
+        const winning=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        
+        const checkWinner=()=>{
+            for(let combo of winningCombinations){
+                const [a,b,c] = combo;
+                if(gameBoard[a]&&gameBoard[a]===gameBoard[b]&&gameBoard[a]===gameBoard[c]){
+                    resultText.textContent='Player ${gameBoard[a]} won';
+                    gameActive=false;
+                    resetButton.disabled=false;
+                }
+            }
+            if(!gameBoard.includes('')&&gameActive){
+                resultText.textContent="It's a draw";
+                resetButton.disabled=false;
+            }
+        };
+        
+        const handleClick=(cell,index)=>{
+            if(gameBoard[index]===''&&gameActive){
+                cell.value=currentPlayer;
+                gameBoard[index]=currentPlayer;
+                checkWinner();
+                if(gameActive){
+                    currentPlayer=currentPlayer==='X'?'O':'X';
+                    resultText.textContent='Player ${currentPlayer}s turn';
+                }
+            }
+        };
+        
+        cells.forEach((cell,index)=>{
+            cell.addEventListener('click',()=>handleClick(cell,index));
+        })
+        
+        resetButton.addEventListener('click',()=>{cells.forEach((cell,index)=>{
+            cell.value='';
+            gameBoard[index]='';
+        });
+        currentPlayer='X';
+        resultText.textContent='Player ${currentPlayer}s turn';
+        resetButton.disabled=true;
+        gameActive=true;
+        });
+        </script>
 
 </body>
 </html>

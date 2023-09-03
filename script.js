@@ -38,4 +38,12 @@ cells.forEach((cell,index)=>{
     cell.addEventListener('click',()=>handleClick(cell,index));
 })
 
-resetButton.addEventListener('click',()=>handleClick(cell,index))
+resetButton.addEventListener('click',()=>{cells.forEach((cell,index)=>{
+    cell.value='';
+    gameBoard[index]='';
+});
+currentPlayer='X';
+resultText.textContent='Player ${currentPlayer}s turn';
+resetButton.disabled=true;
+gameActive=true;
+});
