@@ -120,7 +120,6 @@
         <p class="result">Player X's turn</p>
     </div>
     <button id="reset" disabled>Reset</button>
-
     <script>
         const cells = document.querySelectorAll('.a');
         const resultText = document.querySelector('.result');
@@ -128,13 +127,7 @@
         let currentPlayer = 'X';
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
         let gameActive = true;
-
-        const winningCombinations = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
-
+        const winningCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8],[0, 3, 6], [1, 4, 7], [2, 5, 8],[0, 4, 8], [2, 4, 6]];
         const checkWinner = () => {
             for (let combo of winningCombinations) {
                 const [a, b, c] = combo;
@@ -142,31 +135,30 @@
                     resultText.textContent = `Player ${gameBoard[a]} wins!`;
                     gameActive = false;
                     resetButton.disabled = false;
+                    return; 
                 }
             }
-
             if (!gameBoard.includes('')) {
                 resultText.textContent = "It's a draw!";
                 resetButton.disabled = false;
-            }
-        };
-
-        const handleClick = (cell, index) => {
-            if (gameBoard[index] === '' && gameActive) {
-                cell.value = currentPlayer;
-                gameBoard[index] = currentPlayer;
-                checkWinner();
+                gameActive = false; 
+             } else {
                 if (gameActive) {
                     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
                     resultText.textContent = `Player ${currentPlayer}'s turn`;
                 }
             }
         };
-
+        const handleClick = (cell, index) => {
+            if (gameBoard[index] === '' && gameActive) {
+                cell.value = currentPlayer;
+                gameBoard[index] = currentPlayer;
+                checkWinner();
+            }
+        };
         cells.forEach((cell, index) => {
             cell.addEventListener('click', () => handleClick(cell, index));
         });
-
         resetButton.addEventListener('click', () => {
             cells.forEach((cell, index) => {
                 cell.value = '';
@@ -177,7 +169,6 @@
             resetButton.disabled = true;
             gameActive = true;
         });
-    </script>
-
-</body>
+         </script>
+    </body>
 </html>
